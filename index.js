@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
+const authRoute = require("./routes/authRoutes");
 const app = express();
 
 const PORT = 5000;
@@ -8,6 +9,9 @@ const PORT = 5000;
 //middleware
 app.use(express.json());
 app.use(morgan("dev"));
+
+//routes
+app.use("/api/v1/auth", authRoute);
 
 //connecting the db
 
