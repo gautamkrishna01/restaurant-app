@@ -14,6 +14,7 @@ module.exports = async (req, resp, next) => {
       }
     });
   } catch (error) {
+    console.log(error);
     resp.status(500).json({ message: "Error in Auth Api" });
   }
 };
