@@ -53,7 +53,7 @@ const loginController = async (req, resp) => {
     // Check user passwor || compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      resp.status(500).json({ message: "Invalid credentials" });
+      return resp.status(500).json({ message: "Invalid credentials" });
     }
 
     //genetate the token
@@ -66,7 +66,7 @@ const loginController = async (req, resp) => {
         .json({ message: "User not found or password mismatch" });
     }
 
-    resp.status(200).json({ message: "Login successful", user, token });
+    return resp.status(200).json({ message: "Login successful", user, token });
   } catch (error) {
     resp.status(500).json({ message: "Error in login" });
   }

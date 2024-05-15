@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const authRoute = require("./routes/authRoutes");
+const userRoute = require("./routes/userRoutes");
+
 const app = express();
 
 const PORT = 5000;
@@ -14,7 +16,8 @@ app.use(morgan("dev"));
 app.use("/api/v1/auth", authRoute);
 
 //register routes
-app.use("api/v1/auth", authRoute);
+// app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/user", userRoute);
 
 //connecting the db
 
