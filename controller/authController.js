@@ -45,7 +45,7 @@ const loginController = async (req, resp) => {
     const user = await userModel.findOne({ email: email });
 
     // Check user and password
-    if (!user || user.password !== password) {
+    if (!user) {
       return resp
         .status(404)
         .json({ message: "User not found or password mismatch" });
