@@ -1,5 +1,6 @@
 const userModel = require("../models/userModel");
 
+// register controller methods
 const registerController = async (req, resp) => {
   const { username, email, password, phone, address } = req.body;
   try {
@@ -29,6 +30,35 @@ const registerController = async (req, resp) => {
     resp.status(500).json({ message: "error creating user" });
   }
 };
+
+//login controller methods
+
+const loginController = async (req, resp) => {
+  const { email, password } = req.body;
+  try {
+    // Validation
+    if (!email || !password) {
+      return resp
+        .status(400)
+        .json({ message: "Please provide email and password" });
+    }
+    const user = await userModel.findOne({ email: email });
+
+    // Check user and password
+    if (!user || user.password !== password) {
+      return resp
+        .status(404)
+        .json({ message: "User not found or password mismatch" });
+    }
+
+    // If user found and password matches
+    resp.status(200).json({ message: "Login successful", user });
+  } catch (error) {
+    resp.status(500).json({ message: "Error in login" });
+  }
+};
+
 module.exports = {
   registerController,
+  loginController,
 };

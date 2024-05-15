@@ -10,8 +10,11 @@ const PORT = 5000;
 app.use(express.json());
 app.use(morgan("dev"));
 
-//routes
+// login routes
 app.use("/api/v1/auth", authRoute);
+
+//register routes
+app.use("api/v1/auth", authRoute);
 
 //connecting the db
 
