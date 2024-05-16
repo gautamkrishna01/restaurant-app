@@ -1,4 +1,5 @@
 const userModel = require("../models/userModel");
+const bcrypt = require("bcryptjs");
 
 const getUserController = async (req, resp) => {
   try {
@@ -36,7 +37,41 @@ const updateUserController = async (req, resp) => {
   }
 };
 
+//update password controller
+
+const updatePasswordController = async (req, resp) => {
+  try {
+    // find user
+    const user = await userModel.findById({ _id: req.body.id });
+    // validation
+    if (!user) {
+      return resp.status(404).json({ message: "User not found" });
+    }
+    // get the user
+    const { oldPassword, newPassword } = req.body;
+    if ((!oldPassword, !newPassword)) {
+      return resp
+        .status(500)
+        .json({ message: "Please provide Old and New Password" });
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return resp.status(500).json({ message: "Invalid oldPassword" });
+    }
+    //hashing password
+    const salt = await bcrypt.genSaltSync(10);
+    const hashPassword = await bcrypt.hash(newPassword, salt);
+    user.password = hashPassword;
+    await user.save();
+    resp.status(200).json({ message: "Password update Successfully" });
+  } catch (error) {
+    resp.status(500).json({ message: "Error in update password !!!" });
+  }
+};
+
 module.exports = {
   getUserController,
   updateUserController,
+  updatePasswordController,
 };
