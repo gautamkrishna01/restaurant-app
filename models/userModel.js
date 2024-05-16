@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema(
       default:
         "https://www.google.com/url?sa=i&url=https%3A%2F%2Fstock.adobe.com%2Fsearch%3Fk%3D%2522user%2Bicon%2522&psig=AOvVaw1agbsI6hVVf090fctUViXi&ust=1715787395692000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCMDDz6O8jYYDFQAAAAAdAAAAABAE",
     },
+    answer: {
+      type: String,
+      required: [true, "Answer is required"],
+    },
   },
   { timestamps: true }
 );

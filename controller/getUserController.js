@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const getUserController = async (req, resp) => {
   try {
     const user = await userModel.findById({ _id: req.body.id });
+
     // check validation
     if (!user) {
       return resp.status(404).json({ message: "User not found" });
@@ -25,6 +26,7 @@ const updateUserController = async (req, resp) => {
     }
     // update the user
     const { username, address, phone } = req.body;
+
     if (username) user.username = username;
     if (address) user.address = address;
     if (phone) user.phone = phone;
@@ -70,8 +72,34 @@ const updatePasswordController = async (req, resp) => {
   }
 };
 
+// reset resetPasswordController
+
+const resetPasswordController = async (req, resp) => {
+  try {
+    const { email, newPassword, answer } = req.body;
+    if ((!email || !newPassword, !answer)) {
+      return resp.status(404).json({ message: "Please Provide all Fields" });
+    }
+    const user = await userModel.findOne({ email, answer });
+    if (!user) {
+      return resp
+        .status(500)
+        .json({ message: "User not found or invalid answer" });
+    }
+    const salt = bcrypt.genSaltSync(10);
+    const hashPassword = await bcrypt.hash(newPassword, salt);
+    user.password = hashPassword;
+    await user.save();
+    resp.status(200).json({ message: "Password reset successfully" });
+  } catch (error) {
+    console.log(error);
+    resp.status(500).json({ message: "Error while  reset password" });
+  }
+};
+
 module.exports = {
   getUserController,
   updateUserController,
   updatePasswordController,
+  resetPasswordController,
 };

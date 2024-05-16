@@ -5,10 +5,10 @@ const JWT_SECRET = "mysecretvalue";
 
 // register controller methods
 const registerController = async (req, resp) => {
-  const { username, email, password, phone, address } = req.body;
+  const { username, email, password, phone, address, answer } = req.body;
   try {
     //validation
-    if (!username || !email || !password || !phone || !address) {
+    if ((!username || !email || !password || !phone || !address, !answer)) {
       return resp.status(500).json({ message: "Please Provide all fields" });
     }
     // check existing user
@@ -29,6 +29,7 @@ const registerController = async (req, resp) => {
       password: hashPassword,
       phone,
       address,
+      answer,
     });
     resp.status(200).json({ message: "user created successfully", newUser });
   } catch (error) {
